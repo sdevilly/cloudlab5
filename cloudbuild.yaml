@@ -1,0 +1,13 @@
+steps:
+# Build the container image
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-f', 'Dockerfile.dockerfile', '-t', 'gcr.io/optimum-airfoil-370211/simage', '.']
+# Push the container image to Container Registry
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/optimum-airfoil-370211/simage']
+# Deploy container image to Cloud Run
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: gcloud
+  args: ['run', 'deploy', 'scloud', '--image',  'gcr.io/optimum-airfoil-370211/simage', '--region', 'europe-west1']
+images:
+- gcr.io/optimum-airfoil-370211/simage
